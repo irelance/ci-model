@@ -15,6 +15,7 @@ class SimpleObjectRelationalMappingModel extends CI_Model implements JsonSeriali
 {
     const ALLOW_STATIC_CALL = ['find' => true, 'findFirst' => true, 'count' => true, 'pagination' => true];
     protected $_isNew = true;
+    protected $_connection = 'default';
     protected $_table = '';
     protected $_pk = 'id';
     protected $_fields = [];
@@ -29,7 +30,7 @@ class SimpleObjectRelationalMappingModel extends CI_Model implements JsonSeriali
     public function __construct()
     {
         parent::__construct();
-        $this->load->database();
+        $this->load->database($this->_connection);
         foreach ($this->_fields as $field) {
             $this->$field = null;
         }
