@@ -1,0 +1,17 @@
+{
+    "name": "irelance/ci-model",
+    "type": "library",
+    "description": "An ORM extension of CodeIgniter3 framework",
+    "authors": [
+        {
+            "name": "Irelance",
+            "email": "heirelance@163.com"
+        }
+    ],
+    "require":{},
+    "autoload":{
+        "psr-4":{
+            "Irelance\\Ci3\\Model\\":"src/"
+        }
+    }
+}
