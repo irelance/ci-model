@@ -90,7 +90,9 @@ class SimpleObjectRelationalMappingModel extends CI_Model implements JsonSeriali
             if (!$this->_isNew && $this->_pk == $field) {
                 $this->$field = $this->_pkValue;
             }
-            $data[$field] = $this->$field;
+            if (!is_null($this->$field)) {
+                $data[$field] = $this->$field;
+            }
         }
         if ($this->_isNew) {
             if ($result = $this->db->insert($this->_table, $data)) {
