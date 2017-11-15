@@ -19,6 +19,7 @@ class SimpleObjectRelationalMappingModel extends CI_Model implements JsonSeriali
     protected $_table = '';
     protected $_pk = 'id';
     protected $_fields = [];
+    protected $_outputFields = null;
     protected $_relationFields = [];
     protected $_distributeId = false;
     protected $_timeLogs = true;
@@ -33,6 +34,9 @@ class SimpleObjectRelationalMappingModel extends CI_Model implements JsonSeriali
         $this->load->database($this->_connection);
         foreach ($this->_fields as $field) {
             $this->$field = null;
+        }
+        if (is_null($this->_outputFields)) {
+            $this->_outputFields = $this->_fields;
         }
     }
 
@@ -117,7 +121,7 @@ class SimpleObjectRelationalMappingModel extends CI_Model implements JsonSeriali
     public function toArray()
     {
         $data = [];
-        foreach ($this->_fields as $field) {
+        foreach ($this->_outputFields as $field) {
             $data[$field] = $this->$field;
         }
         if ($this->needRelationFields) {
@@ -352,5 +356,16 @@ class SimpleObjectRelationalMappingModel extends CI_Model implements JsonSeriali
         }
         $name = '_' . $name;
         return call_user_func_array([$instance, $name], $arguments);
+    }
+
+    public function getOutputFields()
+    {
+        return $this->_output;
+    }
+
+    public function setOutputFields($fields)
+    {
+        $this->_output = $fields;
+        return $this;
     }
 }

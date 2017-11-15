@@ -71,4 +71,13 @@ class ModelSet extends Set
         }
         return $result;
     }
+
+    public function setOutputFields($fields)
+    {
+        /* @var SimpleObjectRelationalMappingModel $model */
+        foreach ($this->_data as $model) {
+            $result[] = $model->setOutputFields($fields);
+        }
+        return $this;
+    }
 }
