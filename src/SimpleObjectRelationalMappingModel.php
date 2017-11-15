@@ -362,12 +362,12 @@ class SimpleObjectRelationalMappingModel extends CI_Model implements JsonSeriali
 
     public function getOutputFields()
     {
-        return $this->_output;
+        return $this->_outputFields;
     }
 
     public function setOutputFields($fields)
     {
-        $this->_output = $fields;
+        $this->_outputFields = $fields;
         return $this;
     }
 }
