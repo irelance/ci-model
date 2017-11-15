@@ -296,7 +296,9 @@ class SimpleObjectRelationalMappingModel extends CI_Model implements JsonSeriali
                 $model = $this->$modelName->findFirst([
                     'conditions' => $relateKey . '=?', 'bind' => [$relation->$linkOutKey],
                 ]);
-                $temp[$model->getPrimaryKeyValue()] = $model;
+                if ($model) {
+                    $temp[$model->getPrimaryKeyValue()] = $model;
+                }
             }
             $result = new ModelSet();
             foreach ($temp as $model) {
