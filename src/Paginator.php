@@ -67,4 +67,10 @@ class Paginator extends Set
             'items' => $this->_data->toArray(),
         ];
     }
+
+    public function setOutputFields($fields)
+    {
+        $this->_data->setOutputFields($fields);
+        return $this;
+    }
 }
