@@ -223,14 +223,26 @@ class SimpleObjectRelationalMappingModel extends CI_Model implements JsonSeriali
             $conditions = [];
             foreach ($params['conditions'] as $key => $value) {
                 $v = '';
-                if (is_string($value)) {
-                    $v = $key . '=?';
-                } elseif (is_array($value) && 2 == count($value)) {
-                    $v = $key . $value[0] . '?';
+                $b = '';
+                if (is_numeric($key)) {
+                    if (is_array($value) && 3 == count($value)) {
+                        $v = $value[0] . $value[1] . '?';
+                        $b = $value[2];
+                    } else {
+                        continue;
+                    }
                 } else {
-                    continue;
+                    if (is_string($value)) {
+                        $v = $key . '=?';
+                        $b = $value;
+                    } elseif (is_array($value) && 2 == count($value)) {
+                        $v = $key . $value[0] . '?';
+                        $b = $value[1];
+                    } else {
+                        continue;
+                    }
                 }
-                $params['bind'][] = $value[1];
+                $params['bind'][] = $b;
                 $conditions[] = $v;
             }
             $params['conditions'] = implode('and', $conditions);
