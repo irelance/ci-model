@@ -215,7 +215,6 @@ class SimpleObjectRelationalMappingModel extends CI_Model implements JsonSeriali
     protected function buildParams($params)
     {
         isset($params['conditions']) ?: $params['conditions'] = '';
-        is_string($params['conditions']) ?: $params['conditions'] = '';
         isset($params['bind']) ?: $params['bind'] = [];
         is_array($params['bind']) ?: $params['bind'] = [];
         if (is_array($params['conditions'])) {
@@ -247,6 +246,7 @@ class SimpleObjectRelationalMappingModel extends CI_Model implements JsonSeriali
             }
             $params['conditions'] = implode('and', $conditions);
         }
+        is_string($params['conditions']) ?: $params['conditions'] = '';
         isset($params['order']) ?: $params['order'] = '';
         isset($params['limit']) ?: $params['limit'] = '';
         if (is_array($params['limit']) && 2 == count($params['limit'])) {
