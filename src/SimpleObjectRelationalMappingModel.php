@@ -348,7 +348,7 @@ class SimpleObjectRelationalMappingModel extends CI_Model implements JsonSeriali
 
     public function __call($name, $arguments)
     {
-        if (isset(static::ALLOW_STATIC_CALL[$name]) && static::ALLOW_STATIC_CALL[$name]) {
+        if (array_key_exists($name, static::ALLOW_STATIC_CALL) && static::ALLOW_STATIC_CALL[$name]) {
             $name = '_' . $name;
             return call_user_func_array([$this, $name], $arguments);
         }
@@ -356,17 +356,17 @@ class SimpleObjectRelationalMappingModel extends CI_Model implements JsonSeriali
             $func = $this->$name;
             return $func($arguments);
         }
-        throw new \Exception("Call to undefined method " . static::class . "::" . $name);
+        throw new \Exception("Call to undefined method " . get_called_class() . "::" . $name);
     }
 
     public static function __callStatic($name, $arguments)
     {
         $CI =& get_instance();
-        $model = basename(static::class);
+        $model = basename(get_called_class());
         if (!($instance = $CI->$model) ||
-            !isset(static::ALLOW_STATIC_CALL[$name]) ||
+            !array_key_exists($name, static::ALLOW_STATIC_CALL) ||
             !static::ALLOW_STATIC_CALL[$name]) {
-            throw new \Exception("Call to undefined static method " . static::class . "::" . $name);
+            throw new \Exception("Call to undefined static method " . get_called_class() . "::" . $name);
         }
         $name = '_' . $name;
         return call_user_func_array([$instance, $name], $arguments);
