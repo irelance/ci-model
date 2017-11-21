@@ -244,7 +244,7 @@ class SimpleObjectRelationalMappingModel extends CI_Model implements JsonSeriali
                 $params['bind'][] = $b;
                 $conditions[] = $v;
             }
-            $params['conditions'] = implode('and', $conditions);
+            $params['conditions'] = implode(' and ', $conditions);
         }
         is_string($params['conditions']) ?: $params['conditions'] = '';
         isset($params['order']) ?: $params['order'] = '';
