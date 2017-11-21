@@ -225,7 +225,7 @@ class SimpleObjectRelationalMappingModel extends CI_Model implements JsonSeriali
                 $b = '';
                 if (is_numeric($key)) {
                     if (is_array($value) && 3 == count($value)) {
-                        $v = $value[0] . $value[1] . '?';
+                        $v = $value[0] . ' ' . $value[1] . ' ' . '?';
                         $b = $value[2];
                     } else {
                         continue;
@@ -235,7 +235,7 @@ class SimpleObjectRelationalMappingModel extends CI_Model implements JsonSeriali
                         $v = $key . '=?';
                         $b = $value;
                     } elseif (is_array($value) && 2 == count($value)) {
-                        $v = $key . $value[0] . '?';
+                        $v = $key . ' ' . $value[0] . ' ' . '?';
                         $b = $value[1];
                     } else {
                         continue;
