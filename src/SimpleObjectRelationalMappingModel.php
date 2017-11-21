@@ -13,7 +13,6 @@ use JsonSerializable;
 
 class SimpleObjectRelationalMappingModel extends CI_Model implements JsonSerializable
 {
-    const ALLOW_STATIC_CALL = ['find' => true, 'findFirst' => true, 'count' => true, 'pagination' => true];
     protected $_isNew = true;
     protected $_connection = 'default';
     protected $_table = '';
@@ -348,7 +347,7 @@ class SimpleObjectRelationalMappingModel extends CI_Model implements JsonSeriali
 
     public function __call($name, $arguments)
     {
-        if (array_key_exists($name, static::ALLOW_STATIC_CALL) && static::ALLOW_STATIC_CALL[$name]) {
+        if (static::checkAllowStaticCall($name)) {
             $name = '_' . $name;
             return call_user_func_array([$this, $name], $arguments);
         }
@@ -363,9 +362,7 @@ class SimpleObjectRelationalMappingModel extends CI_Model implements JsonSeriali
     {
         $CI =& get_instance();
         $model = basename(get_called_class());
-        if (!($instance = $CI->$model) ||
-            !array_key_exists($name, static::ALLOW_STATIC_CALL) ||
-            !static::ALLOW_STATIC_CALL[$name]) {
+        if (!($instance = $CI->$model) || !static::checkAllowStaticCall($name)) {
             throw new \Exception("Call to undefined static method " . get_called_class() . "::" . $name);
         }
         $name = '_' . $name;
@@ -381,5 +378,14 @@ class SimpleObjectRelationalMappingModel extends CI_Model implements JsonSeriali
     {
         $this->_outputFields = $fields;
         return $this;
+    }
+
+    public static function checkAllowStaticCall($name)
+    {
+        $allows = ['find' => true, 'findFirst' => true, 'count' => true, 'pagination' => true];
+        if (isset($allows[$name]) && $allows[$name]) {
+            return true;
+        }
+        return false;
     }
 }
