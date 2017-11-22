@@ -37,7 +37,7 @@ class Paginator extends Set
         }
         $config['use_page_numbers'] = true;
         $config['page_query_string'] = true;
-        $config['base_url'] = '//' . $_SERVER['HTTP_HOST'] . $_SERVER['PATH_INFO'];
+        $config['base_url'] = '//' . $_SERVER['HTTP_HOST'] . parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
         $config['total_rows'] = $model->count($params);
         $this->_CI->pagination->initialize($config);
         //end native pagination initialize
