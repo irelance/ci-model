@@ -12,9 +12,11 @@ namespace Irelance\Ci3\Model;
 class Paginator extends Set
 {
     protected $_CI;
-    protected $perPage;
-    protected $totalPage;
-    protected $currentPage;
+    protected $perPage = 0;
+    protected $totalPage = 0;
+    protected $totalNumber = 0;
+    protected $currentPage = 0;
+    protected $offset = 0;
     protected $pageName = 'page';
 
     public function __construct()
@@ -38,18 +40,17 @@ class Paginator extends Set
         $config['use_page_numbers'] = true;
         $config['page_query_string'] = true;
         $config['base_url'] = '//' . $_SERVER['HTTP_HOST'] . parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        $config['total_rows'] = $model->count($params);
+        $this->totalNumber = $config['total_rows'] = $model->count($params);
         $this->_CI->pagination->initialize($config);
         //end native pagination initialize
         $this->currentPage = $this->_CI->input->get($this->pageName) ?: 1;
         $this->totalPage = ceil($config['total_rows'] / $this->perPage);
         if ($this->currentPage < 1 || $this->currentPage > $this->totalPage) {
-            $this->currentPage = 0;
             $this->_data = new ModelSet();
             return false;
         }
-        $offset = ($this->currentPage - 1) * $this->perPage;
-        $params['limit'] = [$offset, $this->perPage,];
+        $this->offset = ($this->currentPage - 1) * $this->perPage;
+        $params['limit'] = [$this->offset, $this->perPage,];
         $this->_data = $model->find($params);
         return true;
     }
@@ -62,8 +63,10 @@ class Paginator extends Set
     public function toArray()
     {
         return [
+            'total_number' => $this->totalNumber,
             'total_page' => $this->totalPage,
             'per_page' => $this->perPage,
+            'offset' => $this->offset,
             'current_page' => $this->currentPage,
             'items' => $this->_data->toArray(),
         ];
