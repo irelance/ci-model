@@ -44,6 +44,7 @@ class Paginator extends Set
         $this->currentPage = $this->_CI->input->get($this->pageName) ?: 1;
         $this->totalPage = ceil($config['total_rows'] / $this->perPage);
         if ($this->currentPage < 1 || $this->currentPage > $this->totalPage) {
+            $this->currentPage = 0;
             $this->_data = new ModelSet();
             return false;
         }
