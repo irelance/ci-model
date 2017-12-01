@@ -43,7 +43,7 @@ class Paginator extends Set
         $this->totalNumber = $config['total_rows'] = $model->count($params);
         $this->_CI->pagination->initialize($config);
         //end native pagination initialize
-        $this->currentPage = $this->_CI->input->get($this->pageName) ?: 1;
+        $this->currentPage = filter_var($this->_CI->input->get($this->pageName), FILTER_VALIDATE_INT, ['options' => ['default' => 1]]);
         $this->totalPage = ceil($config['total_rows'] / $this->perPage);
         if ($this->currentPage < 1 || $this->currentPage > $this->totalPage) {
             $this->_data = new ModelSet();
